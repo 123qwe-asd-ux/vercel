@@ -1,24 +1,14 @@
-export const config = {
-  runtime: "edge",
-};
-
-export default async function handler(req) {
+export default async function handler(req, res) {
   try {
-    // GET 请求（浏览器直接访问）
     if (req.method === "GET") {
-      return new Response("email-hook is running", { status: 200 });
+      return res.status(200).send("email-hook is running");
     }
 
-    // POST 请求才解析 JSON
-    const body = await req.json();
-    const { type, challenge, event } = body;
+    const { type, challenge, event } = req.body;
 
     // URL 验证
     if (type === "url_verification") {
-      return new Response(JSON.stringify({ challenge }), {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-      });
+      return res.status(200).json({ challenge });
     }
 
     const WEBHOOK =
@@ -46,9 +36,9 @@ export default async function handler(req) {
       });
     }
 
-    return new Response("ok", { status: 200 });
+    return res.status(200).send("ok");
   } catch (err) {
     console.error("Error:", err);
-    return new Response("Error", { status: 500 });
+    return res.status(500).send("Error");
   }
 }
