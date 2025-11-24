@@ -1,24 +1,30 @@
 export const config = {
-  runtime: "edge", // 让 fetch 原生可用
+  runtime: "edge",
 };
 
-// Edge Functions 写法（req.json() 才能解析 body）
 export default async function handler(req) {
   try {
+    // GET 请求（浏览器直接访问）
+    if (req.method === "GET") {
+      return new Response("email-hook is running", { status: 200 });
+    }
+
+    // POST 请求才解析 JSON
     const body = await req.json();
     const { type, challenge, event } = body;
 
-    // 飞书 URL 验证
+    // URL 验证
     if (type === "url_verification") {
       return new Response(JSON.stringify({ challenge }), {
         status: 200,
-        headers: { "Content-Type": "application/json" }
+        headers: { "Content-Type": "application/json" },
       });
     }
 
-    const WEBHOOK = "https://open.feishu.cn/open-apis/bot/v2/hook/7e6eab23-9921-49f2-8c8b-a9b827407e5c";
+    const WEBHOOK =
+      "https://open.feishu.cn/open-apis/bot/v2/hook/7e6eab23-9921-49f2-8c8b-a9b827407e5c";
 
-    // 邮件事件处理
+    // 邮件事件
     if (event?.event_type === "mail:mail_received_v1") {
       const mail = event.mail;
 
@@ -35,13 +41,12 @@ export default async function handler(req) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           msg_type: "text",
-          content: { text }
-        })
+          content: { text },
+        }),
       });
     }
 
     return new Response("ok", { status: 200 });
-
   } catch (err) {
     console.error("Error:", err);
     return new Response("Error", { status: 500 });
