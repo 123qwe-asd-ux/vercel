@@ -10,12 +10,6 @@ jobs:
     steps:
       - name: Send to Feishu
         run: |
-          curl -X POST \
-            -H 'Content-Type: application/json' \
-            -d '{
-              "msg_type": "text",
-              "content": {
-                "text": "request example"
-              }
-            }' \
+          curl -X POST -H "Content-Type: application/json" \
+            -d '{"msg_type":"text","content":{"text":"🔔 PR通知: ${{ github.event.action }} - ${{ github.event.pull_request.title }}\n👤 作者: ${{ github.event.pull_request.user.login }}\n链接: ${{ github.event.pull_request.html_url }}"}}' \
             https://open.feishu.cn/open-apis/bot/v2/hook/d87503b9-801a-47a1-bc6d-0a6bc897a601
