@@ -11,11 +11,11 @@ jobs:
       - name: Send to Feishu
         run: |
           curl -X POST \
-            'https://open.feishu.cn/open-apis/bot/v2/hook/d87503b9-801a-47a1-bc6d-0a6bc897a601' \
             -H 'Content-Type: application/json' \
             -d '{
               "msg_type": "text",
               "content": {
                 "text": "request example"
               }
-            }'
+            }' \
+            https://open.feishu.cn/open-apis/bot/v2/hook/d87503b9-801a-47a1-bc6d-0a6bc897a601
