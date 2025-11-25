@@ -16,6 +16,7 @@ jobs:
             -d '{
               "msg_type": "text",
               "content": {
-                "text": "🔔 PR通知: ${{ github.event.action }} - ${{ github.event.pull_request.title }}\n👤 作者: ${{ github.event.pull_request.user.login }}\n链接: ${{ github.event.pull_request.html_url }}"
+                "text": "request example"
+                # "🔔 PR通知: ${{ github.event.action }} - ${{ github.event.pull_request.title }}\n👤 作者: ${{ github.event.pull_request.user.login }}\n链接: ${{ github.event.pull_request.html_url }}"
               }
             }'
